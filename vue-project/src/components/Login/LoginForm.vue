@@ -49,24 +49,14 @@ const rules = reactive({
 
 const v$ = useVuelidate(rules, form);
 
-const handleLogin = () => {
+const handleLogin = async () => {
 
-    let res = store.dispatch('User/login', { email: form.email, password: form.password });
-
+    let res = await store.dispatch('User/login', { email: form.email, password: form.password });
     if(res){
         router.replace('/index');
     }
-    // v$.value.$touch();
-    // if (!v$.value.$error) {
-    //     try {
-    //         store.dispatch('User/login', { email: email.value, password: password.value });
-    //         alert("Logged In");
-    //         // Consider redirecting the user after a successful login
-    //     } catch (error) {
-    //         alert("Login failed");
-    //     }
-    // } else {
-    //     alert("Please correct the errors before submitting.");
-    // }
+    else{
+        alert("Incorrect Password");
+    }
 }
 </script>

@@ -1,7 +1,8 @@
 // store/modules/user.js
 import axios from 'axios';
 
-const BASE_URL = 'https://flushflow.bsite.net'
+// const BASE_URL = 'https://flushflow.bsite.net'
+const BASE_URL = 'https://localhost:7256'
 
 export default {
     namespaced: true,
@@ -19,36 +20,37 @@ export default {
     },
     actions: {
         async login({commit}, { email, password }){
-            const response = await axios.post(`${BASE_URL}/api/user/login`,
+            return axios.post(`${BASE_URL}/api/user/login`,
             {
                 Email:email,
                 Password:password
+            }).then((response) => {
+                if(response.status === 200) {
+                    commit('SET_USER', response.data);
+                    return true;
+                }
+                return false;
+            }).catch((error) => {
+                console.error(error);
+                return false;
             });
-
-            if(response.status === 200) {
-                commit('SET_USER', response.data);
-                return true;
-            }
         },
         async register(_, { username, email, password }) {
-            try {
               // Replace this with your actual API call
-              const response = await axios.post(`${BASE_URL}/api/user/register`,
+            return axios.post(`${BASE_URL}/api/user/register`,
                 {
                     Username:username,
                     Email:email,
                     Password:password
-                });
-
-              if(response.status === 200) {
-                return true;
-              }
-
-            } catch (error) {
-              // Handle the error
-              console.error(error);
-              return false;
-            }
+                }).then((response) => {
+                    if(response.status === 200) {
+                        return true;
+                    }
+                    return false;
+                }).catch((error) => {
+                    console.error(error);
+                    return false;
+            });
         }
 
     },

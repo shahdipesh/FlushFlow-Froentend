@@ -2,7 +2,9 @@
 import axios from 'axios';
 import store from '..';
 
-const BASE_URL = 'https://flushflow.bsite.net'
+// const BASE_URL = 'https://flushflow.bsite.net'
+
+const BASE_URL = 'https://localhost:7256'
 
 export default {
     namespaced: true,
@@ -19,7 +21,6 @@ export default {
             state.didUserApproveTask = didUserApproveTask;
         },
         SET_HAS_ALREADY_REQUESTED_APPROVAL(state, hasAlreadyRequestedApproval) {
-            debugger;
             state.scheduledUser.hasRequestedApproval = hasAlreadyRequestedApproval;
         }
     },
@@ -45,7 +46,6 @@ export default {
         async requestApproval({commit, dispatch},  scheduleId ){
             const response = await axios.post(`${BASE_URL}/api/schedule/initiateTaskCompletion?scheduleId=${scheduleId}`);
             if(response.data){
-                debugger;
                 dispatch('setHasAlreadyRequestedApproval');
                 return true;
             }
@@ -54,7 +54,6 @@ export default {
         async approveChore({commit,dispatch},  {email, scheduleId} ){
             const response = await axios.post(`${BASE_URL}/api/schedule/approveTask?email=${email}&scheduleId=${scheduleId}`);
             if(response){
-                debugger;
                 commit('setTaskAsApproved');
                 return true;
             }
@@ -99,11 +98,9 @@ export default {
             return state?.didUserApproveTask;
         },
         getHasAlreadyRequestedApproval: (state) => {
-            debugger;
             return state?.scheduledUser?.hasRequestedApproval;
         },
         getIsCurrentTaskCompleted: (state) => {
-            debugger;
             return state?.scheduledUser?.status=='C';
         }
     },

@@ -67,11 +67,13 @@ let isInvalid = ref(false);
 
 let violatedRules = ref([]);
 
-const handleRegister = () => {
+const handleRegister = async() => {
     if(validatePwd(password1.value, password.value)){
-        let res = store.dispatch('User/register', {username:username.value, email:email.value, password:password.value});
+        let res = await store.dispatch('User/register', {username:username.value, email:email.value, password:password.value});
         if(res){
             alert('Registered');
+        }else{
+            alert('Failed to Register');
         }
     }
 }
