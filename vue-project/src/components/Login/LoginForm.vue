@@ -52,7 +52,7 @@ const v$ = useVuelidate(rules, form);
 const handleLogin = () => {
 
     let res = store.dispatch('User/login', { email: form.email, password: form.password });
-   
+
     if(res){
         router.replace('/index');
     }
