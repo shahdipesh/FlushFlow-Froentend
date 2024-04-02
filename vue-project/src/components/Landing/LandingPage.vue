@@ -17,10 +17,10 @@
         </div>
         <div class="col-12">
             <div v-if="isWorkingThisWeek" class="text-center p-3 border-round-sm bg-primary font-bold ">
-                <div v-if="hasAskedForApproval">
+                <div v-if="hasAskedForApproval && !isTaskCompleted">
                     {{ currentUser.username }} You Have Already Requested Approval. Good Job!
                 </div>
-                <div v-else>
+                <div v-else-if="!isTaskCompleted">
                     <Button severity="secondary" @click="requestChoreApproval" label="Request Approval" />
                 </div>
             </div>

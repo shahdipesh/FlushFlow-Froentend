@@ -16,7 +16,7 @@ export default {
         // For example:
         SET_USER(state, user) {
             state.user = user;
-        },
+        }
     },
     actions: {
         async login({commit}, { email, password }){
@@ -51,7 +51,10 @@ export default {
                     console.error(error);
                     return false;
             });
-        }
+        },
+        async logout({commit}){
+            commit('SET_USER', null);
+        },
 
     },
     getters: {

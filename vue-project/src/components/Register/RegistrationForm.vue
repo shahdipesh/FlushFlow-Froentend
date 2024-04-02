@@ -36,7 +36,7 @@
         </ul>
         <div class="col-12">
             <div class="flex align-items-center flex-column gap-2">
-                <Button @click="handleRegister" label="Register" />
+                <Button :loading="loading" @click="handleRegister" label="Register" />
             </div>
         </div>
         <div class="col-12">
@@ -58,18 +58,22 @@ let email = ref('');
 let password = ref('');
 let password1 = ref('');
 
+const loading = ref(false);
+
 let isInvalid = ref(false);
 
 let violatedRules = ref([]);
 
 const handleRegister = async () => {
     if (validatePwd(password1.value, password.value)) {
+        loading.value = true;
         let res = await store.dispatch('User/register', { username: username.value, email: email.value, password: password.value });
         if (res) {
             alert('Registered');
         } else {
             alert('Failed to Register');
         }
+        loading.value = false;
     }
 }
 
