@@ -1,8 +1,8 @@
 // store/modules/user.js
 import axios from 'axios';
 
-// const BASE_URL = 'https://flushflow.bsite.net'
-const BASE_URL = 'https://localhost:7256'
+const BASE_URL = 'https://flushflow.bsite.net'
+// const BASE_URL = 'https://localhost:7256'
 
 export default {
     namespaced: true,
