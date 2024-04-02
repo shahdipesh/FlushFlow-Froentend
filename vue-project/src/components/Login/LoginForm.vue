@@ -38,8 +38,8 @@ const store = useStore();
 const router = useRouter();
 
 const form = reactive({
-  email: 'dipeshasd@gmail.com',
-  password: 'asdasd'
+  email: 'sishir@gmail.com',
+  password: 'securepassword'
 });
 
 const rules = reactive({

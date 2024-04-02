@@ -58,7 +58,7 @@ export default {
         // Define your user-related getters here
         // For example:
         user: (state) => {
-            return state.user
+            return state?.user
         },
         username: (state) => {
             return state?.user?.username;
