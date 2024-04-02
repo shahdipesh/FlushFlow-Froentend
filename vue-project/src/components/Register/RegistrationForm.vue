@@ -1,55 +1,50 @@
 <template>
-    <div class="grid">
-        <div class="col-5 col-offset-3">
-            <div class="col-12 col-offset-4">
-                <h2>Register</h2>
-            </div>
-            <div class="col-12">
-                <div class="flex flex-column gap-2">
+    <div class="flex flex-column justify-content-center">
+        <div>
+            <p class="text-3xl text-center font-medium">Create an Account</p>
+        </div>
+        <div class="flex flex-column justify-content-evenly">
+            <div class="flex justify-content-center m-2">
+                <FloatLabel>
                     <label for="username">Username</label>
-                    <InputText type="email" id="username" v-model="username" aria-describedby="username-help" />
-                    <small id="username-help">Enter your preferred Username.</small>
-                </div>
+                    <InputText id="username" v-model="username" aria-describedby="username-help" />
+                </FloatLabel>
             </div>
-            <div class="col-12">
-                <div class="flex flex-column gap-2">
+            <div class="flex justify-content-center m-2">
+                <FloatLabel>
                     <label for="email">Email</label>
                     <InputText id="email" v-model="email" aria-describedby="email-help" />
-                    <small id="email-help">Enter your email.</small>
-                </div>
+                </FloatLabel>
             </div>
-            <div class="col-12">
-                <div class="flex flex-column gap-2">
+            <div class="flex justify-content-center m-2">
+                <FloatLabel>
                     <label for="password">Password</label>
                     <InputText :invalid="isInvalid" type="password" id="password" v-model="password"
                         aria-describedby="password-help" />
-                    <small id="password-help">Enter your Password.</small>
-                </div>
+                </FloatLabel>
             </div>
-            <div class="col-12">
-                <div class="flex flex-column gap-2">
-                    <label for="password">Repeat Password</label>
-                    <InputText :invalid="isInvalid" type="password" id="password" v-model="password1"
-                        aria-describedby="password-help" />
-                    <small id="password-help">Reenter your Password.</small>
-                </div>
+            <div class="flex justify-content-center m-2">
+                <FloatLabel>
+                    <label for="repeatPassword">Repeat Password</label>
+                    <InputText :invalid="isInvalid" type="password" id="repeatPassword" v-model="password1"
+                        aria-describedby="password-repeat-help" />
+                </FloatLabel>
             </div>
-            <ul v-if="isInvalid">
-                <li v-for="(error) in violatedRules" style="color:red">{{ error }}</li>
-            </ul>
-            <div class="col-12">
-                <div class="flex align-items-center flex-column gap-2">
-                    <Button @click="handleRegister" label="Register" />
-                </div>
+        </div>
+        <ul v-if="isInvalid">
+            <li v-for="(error) in violatedRules" style="color:red">{{ error }}</li>
+        </ul>
+        <div class="col-12">
+            <div class="flex align-items-center flex-column gap-2">
+                <Button @click="handleRegister" label="Register" />
             </div>
-            <div class="col-12">
-                <div class="flex align-items-center flex-column gap-2">
-                    <h4>Already Have an Account? <router-link to="/login">Login</router-link></h4>
-                </div>
+        </div>
+        <div class="col-12">
+            <div class="flex align-items-center flex-column gap-2">
+                <p class="text-sm text-center font-medium">Already Have an Account? <router-link to="/login">Login</router-link></p>
             </div>
         </div>
     </div>
-
 </template>
 
 <script setup>
@@ -67,12 +62,12 @@ let isInvalid = ref(false);
 
 let violatedRules = ref([]);
 
-const handleRegister = async() => {
-    if(validatePwd(password1.value, password.value)){
-        let res = await store.dispatch('User/register', {username:username.value, email:email.value, password:password.value});
-        if(res){
+const handleRegister = async () => {
+    if (validatePwd(password1.value, password.value)) {
+        let res = await store.dispatch('User/register', { username: username.value, email: email.value, password: password.value });
+        if (res) {
             alert('Registered');
-        }else{
+        } else {
             alert('Failed to Register');
         }
     }
@@ -87,7 +82,7 @@ const validatePwd = (p1, p2) => {
 
     if (checkPwdSame(p1, p2)) {
         violatedRules.value = [];
-        isInvalid=false;
+        isInvalid = false;
         return true;
     }
     return false;

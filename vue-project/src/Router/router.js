@@ -1,18 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import LoginForm from '../components/Login/LoginForm.vue';
-import RegistrationForm from '../components/Register/RegistrationForm.vue';
+import LoginPage from '../components/Login/LoginPage.vue';
+import RegistrationPage from '../components/Register/RegistrationPage.vue';
 import LandingPage from '../components/Landing/LandingPage.vue';
 
 const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: LoginForm
+    component: LoginPage
   },
   {
     path: '/register',
     name: 'Register',
-    component: RegistrationForm
+    component: RegistrationPage
   },
   {
     path: '/index',
