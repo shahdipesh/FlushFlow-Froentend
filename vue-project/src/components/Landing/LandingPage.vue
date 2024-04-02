@@ -36,7 +36,7 @@
                         <Button severity="danger" disabled @click="handleChoreApproval" label="Approved" />
                     </div>
                     <div class="div" v-else>
-                        <Button severity="danger" @click="handleChoreApproval" label="Approve" />
+                        <Button :loading="loading" severity="danger" @click="handleChoreApproval" label="Approve" />
                     </div>
                 </div>
                 <div v-else-if="allChoresCompleted">All Flushed and Cleared for the week!!</div>
@@ -63,6 +63,8 @@ let scheduledUser = computed(() => store.getters['Schedule/getScheduledUser']);
 
 let allChoresCompleted = ref(false);
 
+const loading = ref(false);
+
 let isTaskCompleted = computed(() => {
     return store.getters['Schedule/getIsCurrentTaskCompleted'];
 });
@@ -77,9 +79,11 @@ const requestChoreApproval = async () => {
 }
 
 const handleChoreApproval = async () => {
+    loading.value = true;
     let currentUser = store.getters['User/user'];
     let scheduleId = store.getters['Schedule/getCurrentScheduleId'];
     store.dispatch('Schedule/approveChore', { email: currentUser.email, scheduleId: scheduleId });
+    loading.value = false;
 }
 
 const didUserApproveTask = computed(() => {
