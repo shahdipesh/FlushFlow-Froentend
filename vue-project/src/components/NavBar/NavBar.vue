@@ -2,6 +2,9 @@
 <template>
     <div class="card">
         <Menubar :model="items">
+            <template #start>
+                <p class="text-md text-center font-medium">FlushFlow | </p>
+             </template>
         <template v-if="currentUser" #end>
            <Button icon="pi pi-sign-out" severity="secondary" @click="handleLogout" label="Logout" />
         </template>

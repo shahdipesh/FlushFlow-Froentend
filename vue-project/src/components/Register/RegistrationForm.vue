@@ -3,27 +3,27 @@
         <div>
             <p class="text-3xl text-center font-medium">Create an Account</p>
         </div>
-        <div class="flex flex-column justify-content-evenly">
-            <div class="flex justify-content-center m-2">
+        <div class="flex flex-column">
+            <div class="flex justify-content-center mb-4">
                 <FloatLabel>
                     <label for="username">Username</label>
                     <InputText id="username" v-model="username" aria-describedby="username-help" />
                 </FloatLabel>
             </div>
-            <div class="flex justify-content-center m-2">
+            <div class="flex justify-content-center mb-4">
                 <FloatLabel>
                     <label for="email">Email</label>
                     <InputText id="email" v-model="email" aria-describedby="email-help" />
                 </FloatLabel>
             </div>
-            <div class="flex justify-content-center m-2">
+            <div class="flex justify-content-center mb-4">
                 <FloatLabel>
                     <label for="password">Password</label>
                     <InputText :invalid="isInvalid" type="password" id="password" v-model="password"
                         aria-describedby="password-help" />
                 </FloatLabel>
             </div>
-            <div class="flex justify-content-center m-2">
+            <div class="flex justify-content-center mb-4">
                 <FloatLabel>
                     <label for="repeatPassword">Repeat Password</label>
                     <InputText :invalid="isInvalid" type="password" id="repeatPassword" v-model="password1"
