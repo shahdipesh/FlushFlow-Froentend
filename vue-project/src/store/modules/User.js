@@ -35,11 +35,24 @@ export default {
                 return false;
             });
         },
-        async register(_, { username, email, password }) {
+        async register(_, { username, email, password, token }) {
               // Replace this with your actual API call
             return axios.post(`${BASE_URL}/api/user/register`,
                 {
                     Username:username,
+                    Email:email,
+                    Password:password,
+                    Token:token
+                }).then((response) => {
+                        return response;
+                }).catch((error) => {
+                    console.error(error);
+                    return error;
+            });
+        },
+        async sendToken(_, { email, password }) {
+            return axios.post(`${BASE_URL}/api/user/sendToken`,
+                {
                     Email:email,
                     Password:password
                 }).then((response) => {

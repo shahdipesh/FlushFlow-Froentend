@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-column justify-content-center">
+    <div v-if="!tokenRequested" class="flex flex-column justify-content-center">
         <div>
             <p class="text-3xl text-center font-medium">Create an Account</p>
         </div>
@@ -36,13 +36,22 @@
         </ul>
         <div class="col-12">
             <div class="flex align-items-center flex-column gap-2">
-                <Button :loading="loading" @click="handleRegister" label="Register" />
+                <Button :loading="loading" @click="sendToken" label="Register" />
             </div>
         </div>
         <div class="col-12">
             <div class="flex align-items-center flex-column gap-2">
-                <p class="text-sm text-center font-medium">Already Have an Account? <router-link to="/login">Login</router-link></p>
+                <p class="text-sm text-center font-medium">Already Have an Account? <router-link
+                        to="/login">Login</router-link></p>
             </div>
+        </div>
+    </div>
+    <div v-else>
+        <div class="flex flex-column full-h align-items-center">
+            <div>
+                <p class="text-lg text-center font-medium">Please Enter the 4 digit code sent to your email</p>
+            </div>
+            <TokenComponent :verifyingToken="verifyingToken" @token-submitted="handleRegister"/>
         </div>
     </div>
 </template>
@@ -50,13 +59,17 @@
 <script setup>
 import { ref } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 const store = useStore();
+const router = useRouter();
 
 let username = ref('');
 let email = ref('');
 let password = ref('');
 let password1 = ref('');
+
+let verifyingToken = ref(false);
 
 const loading = ref(false);
 
@@ -64,16 +77,53 @@ let isInvalid = ref(false);
 
 let violatedRules = ref([]);
 
-const handleRegister = async () => {
+let tokenRequested = ref(false);
+
+const sendToken = async () => {
+
     if (validatePwd(password1.value, password.value)) {
         loading.value = true;
-        let res = await store.dispatch('User/register', { username: username.value, email: email.value, password: password.value });
-        if (res) {
-            alert('Registered');
-        } else {
-            alert('Failed to Register');
-        }
-        loading.value = false;
+        store.dispatch('User/sendToken', {email: email.value, password: password.value })
+        .then((res) => {
+            if (res) {
+                tokenRequested.value = true;
+            } else {
+                alert('Failed to send token');
+            }
+        })
+        .catch(() => {
+            alert('An error occured. Please try again later');
+        })
+    }
+}
+
+const handleRegister = async (token) => {
+     if (validatePwd(password1.value, password.value)) {
+        verifyingToken.value = true;
+        loading.value = true;
+        store.dispatch('User/register', { username: username.value, email: email.value, password: password.value, token: token})
+            .then(res => {
+                debugger;
+                if (res.status == 200) {
+                    alert('Registered');
+                    router.replace('/login');
+                }
+                else if (res.response.status == 401) {
+                    alert('Invalid Token');
+                }
+                else {
+                    alert('Failed to Register');
+                }
+                loading.value = false;
+            })
+            .catch(error => {
+                console.error(error);
+                loading.value = false;
+            })
+            .finally(() => {
+                verifyingToken.value = false;
+                loading.value = false;
+            });
     }
 }
 
