@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div v-else-if="allChoresCompleted">All Flushed and Cleared for the week!!</div>
-
+<!-- test -->
                 <div v-else>
                     <div class="col-12">
                         {{ scheduledUser.email }} has not completed their Chore Yet
