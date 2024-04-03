@@ -29,24 +29,24 @@ export default {
     },
     actions: {
         async findScheduledUser({ commit, dispatch }) {
-                await axios.get(`${BASE_URL}/api/schedule/whoseTurn`).then(async (response) => {
-                    if (response.status === 200) {
-                        await commit('SET_SCHEDULED_USER', response.data);
-                        // get current user email from store
-                        const user = store.getters['User/user'];
-                        const email = user.email;
-                        // get current schedule id from store
-                        const scheduleId = 24;
-                        // check if user has approved the task
-                        dispatch('didUserApproveTask', { email, scheduleId });
-                        return response.data;
-                    }
-                }).catch((error) => {
-                    console.error('An error occurred:', error);
-                });
+            await axios.get(`${BASE_URL}/api/schedule/whoseTurn`).then(async (response) => {
+                if (response.status === 200) {
+                    await commit('SET_SCHEDULED_USER', response.data);
+                    // get current user email from store
+                    const user = store.getters['User/user'];
+                    const email = user.email;
+                    // get current schedule id from store
+                    const scheduleId = 24;
+                    // check if user has approved the task
+                    dispatch('didUserApproveTask', { email, scheduleId });
+                    return response.data;
+                }
+            }).catch((error) => {
+                console.error('An error occurred:', error);
+            });
         },
         async requestApproval({ commit, dispatch }, scheduleId) {
-            axios.post(`${BASE_URL}/api/schedule/initiateTaskCompletion?scheduleId=${scheduleId}`)
+            return axios.post(`${BASE_URL}/api/schedule/initiateTaskCompletion?scheduleId=${scheduleId}`)
                 .then(response => {
                     if (response.data) {
                         dispatch('setHasAlreadyRequestedApproval');
@@ -64,7 +64,7 @@ export default {
                 .then(response => {
                     if (response.status === 200) {
                         dispatch('setTaskAsApproved');
-                        if(response.data.taskStatus == 'C'){
+                        if (response.data.taskStatus == 'C') {
                             commit('SET_TASK_AS_COMPLETED');
                         }
                         return true;
@@ -78,16 +78,16 @@ export default {
         },
         async didUserApproveTask({ commit }, { email, scheduleId }) {
             await axios.get(`${BASE_URL}/api/schedule/hasUserApproved?email=${email}&scheduleId=${scheduleId}`)
-            .then((response) => {
-                if (response.status === 200) {
-                    commit('SET_DID_USER_APPROVE_TASK', true);
-                    return true;
-                }
-            }).catch(error => {
-                console.error('An error occurred:', error);
-                commit('SET_DID_USER_APPROVE_TASK', false);
-                return false;
-            });
+                .then((response) => {
+                    if (response.status === 200) {
+                        commit('SET_DID_USER_APPROVE_TASK', true);
+                        return true;
+                    }
+                }).catch(error => {
+                    console.error('An error occurred:', error);
+                    commit('SET_DID_USER_APPROVE_TASK', false);
+                    return false;
+                });
         },
         setTaskAsApproved({ commit }) {
             commit('SET_DID_USER_APPROVE_TASK', true);

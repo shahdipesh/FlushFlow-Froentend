@@ -21,7 +21,7 @@
                     {{ currentUser.username }} You Have Already Requested Approval. Good Job!
                 </div>
                 <div v-else-if="!isTaskCompleted">
-                    <Button severity="secondary" @click="requestChoreApproval" label="Request Approval" />
+                    <Button severity="secondary" :loading="loading" @click="requestChoreApproval" label="Request Approval" />
                 </div>
             </div>
             <div v-else class="text-center p-3">
@@ -74,16 +74,24 @@ let hasAskedForApproval = computed(() => {
 });
 
 const requestChoreApproval = async () => {
+    loading.value = true;
     let scheduleId = store.getters['Schedule/getCurrentScheduleId'];
-    store.dispatch('Schedule/requestApproval', scheduleId);
+    store.dispatch('Schedule/requestApproval', scheduleId).then((res) => {
+        loading.value = false;
+    }).catch((err) => {
+        loading.value = false;
+    });
 }
 
 const handleChoreApproval = async () => {
     loading.value = true;
     let currentUser = store.getters['User/user'];
     let scheduleId = store.getters['Schedule/getCurrentScheduleId'];
-    store.dispatch('Schedule/approveChore', { email: currentUser.email, scheduleId: scheduleId });
-    loading.value = false;
+    store.dispatch('Schedule/approveChore', { email: currentUser.email, scheduleId: scheduleId }).then((res) =>{
+        loading.value = false;
+    }).catch((err) => {
+        loading.value = false;
+    });
 }
 
 const didUserApproveTask = computed(() => {
