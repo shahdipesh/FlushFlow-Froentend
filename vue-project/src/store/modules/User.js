@@ -31,7 +31,7 @@ export default {
                 }).then((response) => {
                     if (response.status === 200) {
                         //if cookie is present then save it in cookie
-                        commit('SET_USER', response.data);
+                        commit('SET_USER', response.data.user);
                         localStorage.setItem('email', email);
                         localStorage.setItem('token', response.data.token);
                         return true;
