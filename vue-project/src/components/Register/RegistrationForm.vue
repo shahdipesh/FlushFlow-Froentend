@@ -108,7 +108,7 @@ const handleRegister = async (token) => {
                     alert('Registered');
                     router.replace('/login');
                 }
-                else if (res.response.status == 401) {
+                else if (res.status == 401) {
                     alert('Invalid Token');
                 }
                 else {
