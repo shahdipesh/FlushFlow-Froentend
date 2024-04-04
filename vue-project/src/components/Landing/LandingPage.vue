@@ -43,7 +43,7 @@
 <!-- test -->
                 <div v-else>
                     <div class="col-12">
-                        {{ scheduledUser.email }} has not completed their Chore Yet
+                        {{ scheduledUser.email }} has not completed their Chore Yet. You will be notified once they request approval.
                     </div>
                     <Button disabled severity="danger" @click="handleChoreApproval" label="Approve Chore" />
                 </div>
