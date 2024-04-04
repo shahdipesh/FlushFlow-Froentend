@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LoginPage from '../components/Login/LoginPage.vue';
 import RegistrationPage from '../components/Register/RegistrationPage.vue';
 import LandingPage from '../components/Landing/LandingPage.vue';
+import AccountSettingsPage from '../components/Accounts/AccountSettingsPage.vue';
 import store from '../store/index';
 
 const routes = [
@@ -38,6 +39,12 @@ const routes = [
       store.dispatch('User/logout');
     }
   },
+  {
+    path: '/account',
+    name: 'Account',
+    component: AccountSettingsPage,
+    meta: { requiresAuth: true }
+  }
 ];
 
 const router = createRouter({

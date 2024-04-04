@@ -22,22 +22,36 @@ const router = useRouter();
 
 let currentUser = computed(() => store.getters["User/user"]);
 
-const items = ref([
+const baseItems = ref([
     {
         label: 'Home',
-        icon: 'pi pi-home'
+        icon: 'pi pi-home',
+        command: () => router.push('/')
     },
     {
-        label: 'Account Settings',
-        icon: 'pi pi-star'
-    },
-    {
-        label: 'Contact',
-        icon: 'pi pi-envelope'
+        label:'Contact',
+        icon: 'pi pi-envelope',
+        command: () => window.open('https://portfolio-shahdipesh.vercel.app/#contact')
     }
 ]);
 
+const items = computed(() => {
+    if (currentUser.value) {
+        return [
+            ...baseItems.value,
+            {
+                label: 'Account Settings',
+                icon: 'pi pi-cog',
+                command: () => router.push('/account')
+            }
+        ];
+    }
+    return baseItems.value;
+});
+
 const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     store.dispatch("User/logout");
     router.replace("/login");
 };
