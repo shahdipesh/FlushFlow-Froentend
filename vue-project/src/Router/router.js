@@ -7,7 +7,7 @@ import store from '../store/index';
 const routes = [
   {
     path: '/',
-    redirect: '/index'
+    redirect: '/login'
   },
   {
     path: '/login',
@@ -38,10 +38,6 @@ const routes = [
       store.dispatch('User/logout');
     }
   },
-  {
-    path: '/:catchAll(.*)',
-    redirect: '/index'
-  }
 ];
 
 const router = createRouter({
@@ -55,7 +51,7 @@ router.beforeEach((to, from) => {
   if (from.name!="Login" && to.meta.requiresAuth) {
     return store.dispatch('User/getCurrentLoggedInUser').then((res) => {
         if (!store.getters['User/isLoggedIn']) {
-            return { name: 'loginForm' };
+            return { name: 'Login' };
         }
 
         return true;
