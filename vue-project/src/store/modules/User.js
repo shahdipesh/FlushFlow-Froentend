@@ -18,7 +18,6 @@ export default {
         // Define your user-related mutations here
         // For example:
         SET_USER(state, user) {
-            debugger;
             state.user = user;
         }
     },
@@ -51,7 +50,6 @@ export default {
                     Password: password,
                     Token: token
                 }).then((response) => {
-                    debugger;
                     commit('SET_USER', response.data.user);
                     localStorage.setItem('email', email);
                     localStorage.setItem('token', response.data.token);
@@ -87,7 +85,6 @@ export default {
                 });
         },
         async logout({ commit }) {
-            debugger;
             localStorage.removeItem('email');
             localStorage.removeItem('token');
             commit('SET_USER', null);

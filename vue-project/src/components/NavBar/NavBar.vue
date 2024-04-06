@@ -43,6 +43,11 @@ const items = computed(() => {
                 label: 'Account Settings',
                 icon: 'pi pi-cog',
                 command: () => router.push('/account')
+            },
+            {
+                label: 'Transactions',
+                icon: 'pi pi-money-bill',
+                command: () => router.push('/transaction')
             }
         ];
     }

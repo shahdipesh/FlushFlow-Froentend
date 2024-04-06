@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginPage from '../components/Login/LoginPage.vue';
 import RegistrationPage from '../components/Register/RegistrationPage.vue';
+import TransactionPage from '../components/Transactions/TransactionPage.vue';
 import LandingPage from '../components/Landing/LandingPage.vue';
 import AccountSettingsPage from '../components/Accounts/AccountSettingsPage.vue';
+
 import store from '../store/index';
 
 const routes = [
@@ -43,6 +45,12 @@ const routes = [
     path: '/account',
     name: 'Account',
     component: AccountSettingsPage,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/transaction',
+    name: 'Transaction',
+    component: TransactionPage,
     meta: { requiresAuth: true }
   }
 ];

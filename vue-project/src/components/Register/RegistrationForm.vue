@@ -103,7 +103,6 @@ const handleRegister = async (token) => {
         loading.value = true;
         store.dispatch('User/register', { username: username.value, email: email.value, password: password.value, token: token})
             .then(res => {
-                debugger;
                 if (res.status == 200) {
                     alert('Registered');
                     router.replace('/login');
