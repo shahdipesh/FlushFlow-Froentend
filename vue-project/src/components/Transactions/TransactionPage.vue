@@ -1,12 +1,8 @@
 <template>
     <div class="flex flex-column justify-content-center align-items-center w-full mt-4">
-        <div class="flex text-4xl w-full">
-            <div class=" text-4xl flex flex-1 justify-content-center ml-8">
+        <div class="flex text-2xl w-full">
+            <div class="flex justify-content-center align-items-center w-full">
                 Account Summary
-            </div>
-            <div class="text-xs">
-                <p class="">Total Unsettled Balance: ${{ totalExpense }}</p>
-
             </div>
         </div>
         <div class="flex flex-column justify-content-center align-content-center w-full mb-5">

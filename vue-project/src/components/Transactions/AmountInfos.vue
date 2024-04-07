@@ -4,7 +4,7 @@
             <div class="text-2xl mb-2">Balance</div>
             <div class="flex flex-column w-full align-items-center">
             <template v-for="amount in AmountInfos">
-                   <account-info :is-being-notified="isBeingNotified" :is-being-settled="isBeingSettled" @settle-up="settleBalance" @remindToSettle="remindToSettle" :amount="amount.amount" :name="amount.email"/>
+                   <account-info :is-being-notified="isBeingNotified" :is-being-settled="isBeingSettled" @settle-up="settleBalance" @remindToSettle="remindToSettle" :amount="amount.amount" :email="amount.email" :name="amount.username"/>
             </template>
             </div>
         </div>

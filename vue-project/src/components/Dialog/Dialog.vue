@@ -1,10 +1,9 @@
 <template>
-    <div  class="overlay" v-if="props.visible" @click="$emit('hideDialog')">
-        <Dialog :closable="false" v-model:visible="props.visible" header="Add a new Transaction"
-            :style="{ width: '27rem' }">
-            <div class="flex align-items-center gap-3 mb-3">
-                <label for="Expense Description" class="flex flex-1 font-semibold w-6rem">Description</label>
-                <InputText v-model="reason" id="Expense Description" class="flex flex-1" autocomplete="off" />
+    <div class="overlay" v-if="props.visible" @click="$emit('hideDialog')">
+        <Dialog class="dialog" :closable="false" v-model:visible="props.visible" header="Add a new Expense">
+            <div class="flex align-items-center gap-3">
+                <label for="Expense Description" class="flex flex-1 font-semibold">Description</label>
+                <InputText class="flex" v-model="reason" id="Expense Description" />
             </div>
             <div class="flex align-items-center gap-3 mb-5">
                 <label for="amount" class="felx flex-1 font-semibold w-6rem">Amount</label>
@@ -45,5 +44,10 @@ const { emit } = defineEmits(['hideDialog']);
     justify-content: center;
     align-items: center;
     z-index: 1000;
+}
+
+.dialog {
+    width: 80%;
+    max-width: 27rem;
 }
 </style>
