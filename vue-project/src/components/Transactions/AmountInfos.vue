@@ -4,7 +4,7 @@
             <div class="text-2xl mb-2">Balance</div>
             <div class="flex flex-column w-full align-items-center">
             <template v-for="amount in AmountInfos">
-                   <account-info :is-being-notified="isBeingNotified" :is-being-settled="isBeingSettled" @settle-up="settleBalance" @remindToSettle="remindToSettle" :amount="amount.amount" :email="amount.email" :name="amount.username"/>
+                   <account-info @borrowerClicked="handleBorrowerClicked" :is-being-notified="isBeingNotified" :is-being-settled="isBeingSettled" @settle-up="settleBalance" @remindToSettle="remindToSettle" :amount="amount.amount" :email="amount.email" :name="amount.username"/>
             </template>
             </div>
         </div>
@@ -15,10 +15,12 @@
 
 <script setup>
 import AccountInfo from './AmountInfo.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, defineEmits } from 'vue'
 import { useStore } from 'vuex'
 
 const store = useStore();
+
+const emit = defineEmits([ 'borrowerClicked']);
 
 let isBeingSettled = ref(false);
 let isBeingNotified = ref(false);
@@ -26,6 +28,11 @@ let isBeingNotified = ref(false);
 let AmountInfos = computed(() => {
   return store.getters['Transaction/getAmountOwedByAll']
 });
+
+let handleBorrowerClicked = (email) => {
+    emit('borrowerClicked', email);
+}
+
 
 let settleBalance = (email) => {
     isBeingSettled.value = true;

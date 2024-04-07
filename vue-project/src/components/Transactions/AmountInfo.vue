@@ -2,9 +2,9 @@
     <Card class="w-full h-1">
         <template #content>
             <div class="flex w-full align-items-center" style="height: 40px;">
-                <p class="text-sm flex flex-1">{{ name }}</p>
+                <p @click="$emit('borrowerClicked', email)" class="text-sm flex flex-1">{{ name }}</p>
                 <p :class="amountClass" class="flex mr-4">${{ formattedAmount }}</p>
-                <Button :loading="props.isBeingSettled" :disabled="props.amount<0" @click="$emit('settleUp', email)" icon="pi pi-check" title="Approve" severity="danger" text rounded aria-label="Settle" />
+                <Button :loading="props.isBeingSettled" :disabled="props.amount<0" @click="$emit('settleUp', email)" icon="pi pi-check" title="Settle" severity="contrast" text rounded aria-label="Settle" />
                 <Button :loading="props.isBeingNotified" icon="pi pi-bell" @click="$emit('remindToSettle', email)" title="Notify" severity="secondary" text rounded aria-label="Notification" />
             </div>
         </template>
@@ -23,7 +23,7 @@ const props = defineProps({
 })
 const formattedAmount = computed(() => props.amount.toFixed(2));
 
-const emit = defineEmits(['settleUp']);
+const emit = defineEmits(['settleUp', 'borrowerClicked']);
 
 const amountClass = computed(() => ({
     'text-sm': true,

@@ -6,7 +6,7 @@
                 <p class="text-md text-center font-medium">FlushFlow | </p>
              </template>
         <template v-if="currentUser" #end>
-           <Button icon="pi pi-sign-out" severity="secondary" @click="handleLogout" label="Logout" />
+           <Button icon="pi pi-sign-out" severity="secondary" @click="handleLogout" />
         </template>
         </Menubar>
     </div>
@@ -45,7 +45,7 @@ const items = computed(() => {
                 command: () => router.push('/account')
             },
             {
-                label: 'Transactions',
+                label: 'Splitwise',
                 icon: 'pi pi-money-bill',
                 command: () => router.push('/transaction')
             }

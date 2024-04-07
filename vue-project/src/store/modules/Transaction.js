@@ -28,8 +28,15 @@ export default {
                 user.amount += amount;
             });
         },
+        UPDATE_AMOUNT_OWED_BY_USERS(state, { emails, amount }) {
+            state.amountOwed.forEach((user) => {
+                if (emails.includes(user.email)) {
+                    user.amount += amount;
+                }
+            });
+        },
         ADD_TOTAL_EXPENSE(state, amount) {
-            debugger;
+
             state.totalExpense += amount;
         },
         DECREASE_TOTAL_EXPENSE(state, amount) {
@@ -49,6 +56,13 @@ export default {
                     user.amount = 0;
                 }
             });
+        },
+        SET_ALL_TRANSACTIONS(state, transactions) {
+
+            state.transactions = transactions;
+        },
+        SET_USERS(state, users) {
+            state.users = users;
         }
     },
     actions: {
@@ -72,8 +86,8 @@ export default {
                 });
         },
 
-        async addTransaction({ commit }, { email, amount, reason }) {
-            return axios.post(`${BASE_URL}/api/transaction/addTransaction`, { email, amount, reason })
+        async addTransaction({ commit }, { email, username, amount, description }) {
+            return axios.post(`${BASE_URL}/api/transaction/addTransaction`, { email, username, amount, reason: description })
                 .then((response) => {
                     commit('ADD_TOTAL_EXPENSE', amount); // Removed extra closing parenthesis
                     commit('ADD_AMOUNT_OWED_BY_ALL', response.data);
@@ -84,7 +98,7 @@ export default {
         },
 
         async settleUp({ commit, dispatch }, { borrowerEmail }) {
-            debugger;
+
             return axios.post(`${BASE_URL}/api/transaction/settleBalance`, { ownerEmail: localStorage.email, borrowerEmail })
                 .then((response) => {
                     commit('DECREASE_TOTAL_EXPENSE', response.data);
@@ -102,6 +116,52 @@ export default {
                 }).catch((error) => {
                     console.error(error);
                 });
+        },
+
+        async getAllTransactionsForThisMonth({ commit }) {
+
+            return axios.get(`${BASE_URL}/api/transaction/getAllTransactionsForThisMonth`)
+                .then((response) => {
+                    commit('SET_ALL_TRANSACTIONS', response.data);
+                    return response;
+                }).catch((error) => {
+                    console.error(error);
+                });
+        },
+
+
+        async addCustomTransaction({ commit }, { emails, ownerEmail, ownerUsername, amount, description }) {
+            debugger;
+            return axios.post(`${BASE_URL}/api/transaction/addCustomTransaction`, { emails, ownerEmail,ownerUsername, amount, description })
+                .then((response) => {
+                    let perUserAmount = amount / (emails.length+1);
+                    commit('UPDATE_AMOUNT_OWED_BY_USERS', { emails, amount:perUserAmount });
+                    return response;
+                }).catch((error) => {
+                    console.error(error);
+                });
+        },
+
+        async getTransactionsBetweenTwoUsers({ commit}, { borrowerEmail }) {
+            let ownerEmail = localStorage.email;
+            return axios.get(`${BASE_URL}/api/transaction/getTransactionBetweenUsers?ownerEmail=${ownerEmail}&borrowerEmail=${borrowerEmail}`)
+                .then((response) => {
+                    return response;
+                }).catch((error) => {
+                    console.error(error);
+                    return error;
+                });
+        },
+
+        async getAllUsers({ commit}) {
+            return axios.get(`${BASE_URL}/api/user/allUsers`)
+                .then((response) => {
+                    commit('SET_USERS', response.data);
+                    return response;
+                }).catch((error) => {
+                    console.error(error);
+                    return error;
+                });
         }
 
     },
@@ -112,6 +172,13 @@ export default {
         },
         getTotalExpense(state) {
             return state.totalExpense;
+        },
+        getAllTransactionsForThisMonth(state) {
+
+            return state.transactions;
+        },
+        getAllUsers(state) {
+            return state.users;
         }
     },
 };

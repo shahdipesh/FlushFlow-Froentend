@@ -33,6 +33,7 @@ export default {
                         commit('SET_USER', response.data.user);
                         localStorage.setItem('email', email);
                         localStorage.setItem('token', response.data.token);
+                        localStorage.setItem('username', response.data.user.username);
                         return true;
                     }
                     return false;
@@ -89,7 +90,7 @@ export default {
             localStorage.removeItem('token');
             commit('SET_USER', null);
             router.push('/login');
-        },
+        }
 
     },
     getters: {
