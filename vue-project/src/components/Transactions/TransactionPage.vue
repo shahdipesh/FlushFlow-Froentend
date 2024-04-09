@@ -17,7 +17,7 @@
     <AddExpenseDialog :isTransactionSaveInProgress="isTransactionSaveInProgress" :visible="showDialog"
         @hideDialog="showDialog = false" @saveTransaction="handleTransactionSave" />
     <expense-history-dialog :visible="showExpenseHistoryDialog" @hideDialog="showExpenseHistoryDialog = false" />
-    <user-expense-dialog :expenseHistoryBetweenTwoUsers=" expenseHistoryBetweenTwoUsers" :selectedUserEmail="currentSelectedUser" :visible="showUserExpenseDialog" @hideDialog="showUserExpenseDialog = false" />
+    <user-expense-dialog @remindAboutIncorrectTransaction="reportIncorrectTransaction" @customUserTransactionDeleted="handleCustomTransactionDelete" :expenseHistoryBetweenTwoUsers= "expenseHistoryBetweenTwoUsers" :selectedUserEmail="currentSelectedUser" :visible="showUserExpenseDialog" @hideDialog="showUserExpenseDialog = false" />
 
 </template>
 
@@ -38,18 +38,34 @@ let currentSelectedUser = ref('Dipesh');
 
 let showUserExpenseDialog = ref(false);
 
-let  expenseHistoryBetweenTwoUsers = ref([]);
+let  expenseHistoryBetweenTwoUsers = computed(() => {
+    return store.getters['Transaction/getCurrentTransactionBetweenSelectedUsers']
+});
 
 let totalExpense = computed(() => {
     return store.getters['Transaction/getTotalExpense']
 });
 
+let handleCustomTransactionDelete = () => {
+    store.dispatch('Transaction/getTransactionsBetweenTwoUsers', {borrowerEmail:email}).then((res) => {
+        showUserExpenseDialog.value = true;
+         expenseHistoryBetweenTwoUsers.value = res.data;
+    });
+}
+
 let handleBorrowerClicked = (email) => {
     currentSelectedUser.value = email;
     store.dispatch('Transaction/getTransactionsBetweenTwoUsers', {borrowerEmail:email}).then((res) => {
-        debugger;
         showUserExpenseDialog.value = true;
          expenseHistoryBetweenTwoUsers.value = res.data;
+    });
+}
+
+let reportIncorrectTransaction = (id, targetEmail, reporter) => {
+    store.dispatch('Transaction/reportIncorrectTransaction', {id,targetEmail,reporter}).then((res) => {
+        alert('Email sent to the user about this incorrect transaction');
+    }).catch(() => {
+        alert('Failed to notify user about incorrect transaction');
     });
 }
 
@@ -62,7 +78,6 @@ let showExpenseHistoryDialog = ref(false);
 
 let handleTransactionSave = ({ selectedUserEmails, amount, description }) => {
         isTransactionSaveInProgress.value = true;
-        debugger;
         store.dispatch('Transaction/addCustomTransaction', { emails: selectedUserEmails, ownerEmail: localStorage.email, ownerUsername: localStorage.username , amount, description }).then((res) => {
             isTransactionSaveInProgress.value = false;
             showDialog.value = false;

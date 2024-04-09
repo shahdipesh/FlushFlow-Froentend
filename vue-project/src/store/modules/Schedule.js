@@ -2,9 +2,8 @@
 import axios from 'axios';
 import store from '..';
 
-const BASE_URL = 'https://flushflow.bsite.net'
-
-// const BASE_URL = 'https://localhost:7256'
+// const BASE_URL = 'https://flushflow.bsite.net'
+const BASE_URL = 'https://localhost:7256'
 
 export default {
     namespaced: true,

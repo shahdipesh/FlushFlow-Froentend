@@ -1,11 +1,17 @@
 <template>
-    <div class="overlay" v-if="props.visible" @click="$emit('hideDialog')">
+    <div class="overlay w-full" v-if="props.visible" @click="$emit('hideDialog')">
         <Dialog class="dialog" :closable="false" v-model:visible="props.visible" header="Expense History">
                 <template v-for="transaction in transactionHistory">
                     <card>
                         <template #content>
-                            <div class="text-xs">
+                            <div class="text-xs" v-if="transaction.email!=currentUserEmail">
                                {{ transaction.username }} spent {{ transaction.amount }} for {{ transaction.reason }} on {{ formatDate(transaction.date) }}
+                            </div>
+                            <div class="text-xs" v-else>
+                                You spent {{ transaction.amount }} for {{ transaction.reason }} on {{ formatDate(transaction.date) }}
+                             </div>
+                             <div  class="flex ml-2 w-full h-1rem" v-if="transaction.email===currentUserEmail">
+                                <Button @loading="isDeleteTransactionInProgress" type="button" severity="danger" label="Settle" @click="deleteTransaction(transaction.id)">Delete</Button>
                             </div>
                         </template>
                     </card>
@@ -31,6 +37,10 @@ let transactionHistory = computed(() => {
     return store.getters['Transaction/getAllTransactionsForThisMonth']
 });
 
+let currentUserEmail = computed(() => {
+    return store.getters['User/email']
+});
+
 const { emit } = defineEmits(['hideDialog']);
 
 const formatDate = (dateString) => {
@@ -38,6 +48,12 @@ const formatDate = (dateString) => {
     const monthName = date.toLocaleString('default', { month: 'long' });
     return `${monthName} ${date.getDate()}`;
 };
+
+const deleteTransaction = (id) => {
+    store.dispatch('Transaction/deleteTransactionGroup', id).then(() => {
+        store.dispatch('Transaction/getAllTransactionsForThisMonth');
+    });
+}
 
 onMounted(() => {
     store.dispatch('Transaction/getAllTransactionsForThisMonth');

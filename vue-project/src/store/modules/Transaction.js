@@ -63,6 +63,22 @@ export default {
         },
         SET_USERS(state, users) {
             state.users = users;
+        },
+        SET_CURRENT_TRANSACTION_BETWEEN_SELECTED_USERS(state, transactions) {
+            state.currentTransactionBetweenSelectedUsers = transactions;
+        },
+        UPDATE_AMOUNT_OWED_AFTER_DELETE(state, { borrowerEmail, amount }) {
+            debugger;
+            state.amountOwed.forEach((user) => {
+                if (user.email === borrowerEmail) {
+                    user.amount -= amount;
+                }
+            });
+        },
+        UPDATE_AMOUNT_OWED_AFTER_DELETE_GROUP_TRANSACTION(state, { amount }) {
+            state.amountOwed.forEach((user) => {
+                user.amount -= amount;
+            });
         }
     },
     actions: {
@@ -131,7 +147,6 @@ export default {
 
 
         async addCustomTransaction({ commit }, { emails, ownerEmail, ownerUsername, amount, description }) {
-            debugger;
             return axios.post(`${BASE_URL}/api/transaction/addCustomTransaction`, { emails, ownerEmail,ownerUsername, amount, description })
                 .then((response) => {
                     let perUserAmount = amount / (emails.length+1);
@@ -145,6 +160,43 @@ export default {
         async getTransactionsBetweenTwoUsers({ commit}, { borrowerEmail }) {
             let ownerEmail = localStorage.email;
             return axios.get(`${BASE_URL}/api/transaction/getTransactionBetweenUsers?ownerEmail=${ownerEmail}&borrowerEmail=${borrowerEmail}`)
+                .then((response) => {
+                    commit('SET_CURRENT_TRANSACTION_BETWEEN_SELECTED_USERS', response.data);
+                    return response;
+                }).catch((error) => {
+                    console.error(error);
+                    return error;
+                });
+        },
+
+        async deleteTransactionCustom({ commit },{id, borrowerEmail}) {
+            return axios.delete(`${BASE_URL}/api/transaction/deleteTransactionCustom?id=${id}`)
+                .then((response) => {
+                    debugger;
+                    commit('UPDATE_AMOUNT_OWED_AFTER_DELETE', { borrowerEmail, amount:response.data.amount });
+                    commit('getTransactionsBetweenTwoUsers', { borrowerEmail });
+                    return response;
+                }).catch((error) => {
+                    console.error(error);
+                    return error;
+                });
+        },
+
+        async deleteTransactionGroup({ commit,state },  id ) {
+            return axios.delete(`${BASE_URL}/api/transaction/deleteTransactionGroup?id=${id}`)
+                .then((response) => {
+                    //use state.users
+                    let numUsers = state.users.length;
+                    commit('UPDATE_AMOUNT_OWED_AFTER_DELETE_GROUP_TRANSACTION', {amount: (response.data.amount)/numUsers });
+                    return response;
+                }).catch((error) => {
+                    console.error(error);
+                    return error;
+                });
+        },
+
+        async reportIncorrectTransaction({ commit }, { id, targetEmail, reporter=localStorage.email }) {
+            return axios.post(`${BASE_URL}/api/transaction/reportIncorrectTransaction`, { id, targetEmail, reporter})
                 .then((response) => {
                     return response;
                 }).catch((error) => {
@@ -179,6 +231,9 @@ export default {
         },
         getAllUsers(state) {
             return state.users;
+        },
+        getCurrentTransactionBetweenSelectedUsers(state) {
+            return state.currentTransactionBetweenSelectedUsers;
         }
     },
 };
