@@ -13,7 +13,7 @@
             </div>
         </div>
         <div v-else>
-            Loading...
+            <ProgressSpinner />
         </div>
         <Button class="mr-2" @click="showDialog = true" severity="primary" label="Add a new Transaction" />
         <Button class="mt-3" @click="handleShowExpenseHistoryDialog" severity="warning"
@@ -34,6 +34,9 @@ import ExpenseHistoryDialog from '../Dialog/ExpenseHistoryDialog.vue'
 import UserExpenseDialog from '../Dialog/UserExpenseDialog.vue'
 import { ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
+
+import ProgressSpinner from 'primevue/progressspinner';
+
 
 const store = useStore();
 
