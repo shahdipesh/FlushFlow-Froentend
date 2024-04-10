@@ -4,8 +4,8 @@
             <div class="flex w-full align-items-center" style="height: 40px;">
                 <p @click="$emit('borrowerClicked', email)" class="text-sm flex flex-1">{{ name }}</p>
                 <p :class="amountClass" class="flex mr-4">${{ formattedAmount }}</p>
-                <Button :loading="props.isBeingSettled" :disabled="props.amount<=0" @click="$emit('settleUp', email)" icon="pi pi-check" title="Settle" severity="contrast" text rounded aria-label="Settle" />
-                <Button :loading="props.isBeingNotified" icon="pi pi-bell" @click="$emit('remindToSettle', email)" title="Notify" severity="secondary" text rounded aria-label="Notification" />
+                <Button :loading="props.isBeingSettled" :disabled="props.amount<=0" @click="$emit('settleUp', email)" title="Settle" severity="help" rounded aria-label="Settle" >Settle</Button>
+                <Button :loading="props.isBeingNotified" :disabled="props.amount===0" icon="pi pi-bell" @click="$emit('remindToSettle', email)" title="Notify" severity="secondary" text rounded aria-label="Notification" />
             </div>
         </template>
     </Card>
@@ -40,5 +40,9 @@ const amountClass = computed(() => ({
 .settleBtn{
     height: 10px;
     width: 20px;
+}
+.p-card{
+    margin-bottom: 10px;
+    border: 1px solid #ad94ec;
 }
 </style>

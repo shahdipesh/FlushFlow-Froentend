@@ -16,7 +16,7 @@
             <ProgressSpinner />
         </div>
         <Button class="mr-2" @click="showDialog = true" severity="primary" label="Add a new Transaction" />
-        <Button class="mt-3" @click="handleShowExpenseHistoryDialog" severity="warning"
+        <Button class="mt-3" @click="handleShowExpenseHistoryDialog" severity="contrast"
             label="Show Expense Log for this month" />
     </div>
     <AddExpenseDialog :isTransactionSaveInProgress="isTransactionSaveInProgress" :visible="showDialog"
