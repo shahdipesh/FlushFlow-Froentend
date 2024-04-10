@@ -11,7 +11,7 @@
             </div>
         </div>
         <Button class="mr-2" @click="showDialog = true" severity="primary" label="Add a new Transaction" />
-        <Button class="mt-3" @click="showExpenseHistoryDialog = true" severity="warning"
+        <Button class="mt-3" @click="handleShowExpenseHistoryDialog" severity="warning"
             label="Show Expense Log for this month" />
     </div>
     <AddExpenseDialog :isTransactionSaveInProgress="isTransactionSaveInProgress" :visible="showDialog"
@@ -51,6 +51,11 @@ let handleCustomTransactionDelete = () => {
         showUserExpenseDialog.value = true;
          expenseHistoryBetweenTwoUsers.value = res.data;
     });
+}
+
+const handleShowExpenseHistoryDialog = () => {
+    store.dispatch('Transaction/getAllTransactionsForThisMonth');
+    showExpenseHistoryDialog.value = true;
 }
 
 let handleBorrowerClicked = (email) => {

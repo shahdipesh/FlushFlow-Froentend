@@ -75,11 +75,11 @@ export default {
                 }
             });
         },
-        UPDATE_AMOUNT_OWED_AFTER_DELETE_GROUP_TRANSACTION(state, { amount }) {
-            state.amountOwed.forEach((user) => {
-                user.amount -= amount;
-            });
-        }
+        // UPDATE_AMOUNT_OWED_AFTER_DELETE_GROUP_TRANSACTION(state, { amount }) {
+        //     state.amountOwed.forEach((user) => {
+        //         user.amount -= amount;
+        //     });
+        // }
     },
     actions: {
         async getAmountsOwedToCurrentUser({ commit }) {
@@ -182,12 +182,11 @@ export default {
                 });
         },
 
-        async deleteTransactionGroup({ commit,state },  id ) {
+        async deleteTransactionGroup({ commit,dispatch },  id ) {
             return axios.delete(`${BASE_URL}/api/transaction/deleteTransactionGroup?id=${id}`)
                 .then((response) => {
-                    //use state.users
-                    let numUsers = state.users.length;
-                    commit('UPDATE_AMOUNT_OWED_AFTER_DELETE_GROUP_TRANSACTION', {amount: (response.data.amount)/numUsers });
+                    debugger;
+                    window.location.reload();
                     return response;
                 }).catch((error) => {
                     console.error(error);
