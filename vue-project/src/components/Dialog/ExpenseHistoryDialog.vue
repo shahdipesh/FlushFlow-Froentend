@@ -1,6 +1,6 @@
 <template>
     <div class="overlay w-full" v-if="props.visible" @click="$emit('hideDialog')">
-        <Dialog class="dialog" :closable="false" v-model:visible="props.visible" header="Expense History">
+        <Dialog class="dialog" :closable="false" v-model:visible="props.visible" header="Group Expense History">
                 <template v-for="transaction in transactionHistory">
                     <card>
                         <template #content>

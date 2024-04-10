@@ -4,7 +4,7 @@
             <div class="flex w-full align-items-center" style="height: 40px;">
                 <p @click="$emit('borrowerClicked', email)" class="text-sm flex flex-1">{{ name }}</p>
                 <p :class="amountClass" class="flex mr-4">${{ formattedAmount }}</p>
-                <Button :loading="props.isBeingSettled" :disabled="props.amount<0" @click="$emit('settleUp', email)" icon="pi pi-check" title="Settle" severity="contrast" text rounded aria-label="Settle" />
+                <Button :loading="props.isBeingSettled" :disabled="props.amount<=0" @click="$emit('settleUp', email)" icon="pi pi-check" title="Settle" severity="contrast" text rounded aria-label="Settle" />
                 <Button :loading="props.isBeingNotified" icon="pi pi-bell" @click="$emit('remindToSettle', email)" title="Notify" severity="secondary" text rounded aria-label="Notification" />
             </div>
         </template>
