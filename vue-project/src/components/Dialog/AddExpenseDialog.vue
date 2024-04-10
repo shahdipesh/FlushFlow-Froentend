@@ -61,7 +61,7 @@ let handleAmtChange=(e) =>{
     console.log(e)
 }
 
-const { emit } = defineEmits(['hideDialog']);
+const  emit  = defineEmits(['hideDialog']);
 
 let handleSave = (selectedUserEmails, amount, description) => {
     emit('saveTransaction', { selectedUserEmails, amount, description });
