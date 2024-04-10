@@ -35,12 +35,7 @@ let handleBorrowerClicked = (email) => {
 
 
 let settleBalance = (email) => {
-    isBeingSettled.value = true;
-    store.dispatch('Transaction/settleUp', {borrowerEmail: email}).then(() => {
-        isBeingSettled.value = false;
-    }).catch(() => {
-        isBeingSettled.value = false;
-    });
+    //handled in child
 }
 
 let remindToSettle = (email) => {
