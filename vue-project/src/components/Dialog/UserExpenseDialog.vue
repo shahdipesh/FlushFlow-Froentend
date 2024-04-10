@@ -1,6 +1,7 @@
 <template>
     <div class="overlay" v-if="props.visible" @click="$emit('hideDialog')">
-        <Dialog class="dialog" :closable="false" v-model:visible="props.visible" header="Expense between you and ">
+        <ProgressSpinner v-if="isDeleteTransactionInProgress"/>
+        <Dialog v-else class="dialog" :closable="false" v-model:visible="props.visible" header="Expense between you and ">
             <template #header>
                 Expense between You and {{ selectedUserEmail }}
                 </template>
@@ -32,6 +33,8 @@
 <script setup>
 import { defineProps, watch, defineEmits, computed, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
+import ProgressSpinner from 'primevue/progressspinner';
+
 
 const store = useStore();
 
@@ -68,6 +71,8 @@ const deleteTransaction = (id) => {
     store.dispatch('Transaction/deleteTransactionCustom',{id,borrowerEmail: props.selectedUserEmail}).then((res) => {
         store.dispatch('Transaction/getTransactionsBetweenTwoUsers', {borrowerEmail:props.selectedUserEmail}).then((res) => {
             props.expenseHistoryBetweenTwoUsers = res.data;
+            isDeleteTransactionInProgress.value = false;
+        }).catch((err) => {
             isDeleteTransactionInProgress.value = false;
         });
         emit('customUserTransactionDeleted');
