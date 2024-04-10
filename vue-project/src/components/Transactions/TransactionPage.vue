@@ -5,10 +5,15 @@
                 Account Summary
             </div>
         </div>
-        <div class="flex flex-column justify-content-center align-content-center w-full mb-5">
-            <div class="flex flex-column justify-content-end align-content-center w-full">
-                <account-infos @borrowerClicked="handleBorrowerClicked"/>
+        <div  class="flex flex-column justify-content-center align-content-center w-full mb-5" v-if="!isLoadingTransactionHistoryBetnUsers">
+            <div>
+                <div class="flex flex-column justify-content-end align-content-center w-full">
+                    <account-infos @borrowerClicked="handleBorrowerClicked"/>
+                </div>
             </div>
+        </div>
+        <div v-else>
+            Loading...
         </div>
         <Button class="mr-2" @click="showDialog = true" severity="primary" label="Add a new Transaction" />
         <Button class="mt-3" @click="handleShowExpenseHistoryDialog" severity="warning"
@@ -37,6 +42,8 @@ let isTransactionSaveInProgress = ref(false);
 let currentSelectedUser = ref('Dipesh');
 
 let showUserExpenseDialog = ref(false);
+
+let isLoadingTransactionHistoryBetnUsers =  ref(true);
 
 let  expenseHistoryBetweenTwoUsers = computed(() => {
     return store.getters['Transaction/getCurrentTransactionBetweenSelectedUsers']
@@ -93,9 +100,11 @@ let handleTransactionSave = ({ selectedUserEmails, amount, description }) => {
 }
 
 onMounted(() => {
-    store.dispatch('Transaction/getAmountsOwedToCurrentUser');
+    isLoadingTransactionHistoryBetnUsers.value = true;
+    store.dispatch('Transaction/getAmountsOwedToCurrentUser').then(res => {
+        isLoadingTransactionHistoryBetnUsers.value = false;
+    });
     store.dispatch('Transaction/getTotalExpense');
-
 })
 
 </script>
