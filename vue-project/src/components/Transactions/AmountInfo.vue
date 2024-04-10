@@ -5,7 +5,7 @@
                 <p @click="$emit('borrowerClicked', email)" class="text-sm flex flex-1">
                     {{ name }}
                     <i v-if="props?.amount > 0" class="text-xs ml-3" style="color:green">owes</i>
-                    <i v-else-if="props?.amount < 0" class="text-xs ml-3" style="color:red">owns you</i>
+                    <i v-else-if="props?.amount < 0" class="text-xs ml-3" style="color:red">you own then</i>
                 </p>
                 <p :class="amountClass" class="flex mr-4">${{ formattedAmount }}</p>
                 <Button :loading="isBeingSettled" :disabled="props.amount<=0" @click="settleBalance(props.email)" icon="pi pi-check" title="Settle" severity="contrast" text rounded aria-label="Settle" />
