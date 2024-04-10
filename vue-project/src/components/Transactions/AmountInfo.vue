@@ -2,7 +2,11 @@
     <Card class="w-full h-1">
         <template #content>
             <div class="flex w-full align-items-center" style="height: 40px;">
-                <p @click="$emit('borrowerClicked', email)" class="text-sm flex flex-1">{{ name }}</p>
+                <p @click="$emit('borrowerClicked', email)" class="text-sm flex flex-1">
+                    {{ name }}
+                    <i v-if="props?.amount > 0" class="text-xs ml-3" style="color:green">owes</i>
+                    <i v-else-if="props?.amount < 0" class="text-xs ml-3" style="color:red">owns you</i>
+                </p>
                 <p :class="amountClass" class="flex mr-4">${{ formattedAmount }}</p>
                 <Button :loading="isBeingSettled" :disabled="props.amount<=0" @click="settleBalance(props.email)" icon="pi pi-check" title="Settle" severity="contrast" text rounded aria-label="Settle" />
                 <Button :loading="isBeingNotified" icon="pi pi-bell" :disabled="props.amount==0" @click="remindToSettle(email)" title="Notify" severity="secondary" text rounded aria-label="Notification" />

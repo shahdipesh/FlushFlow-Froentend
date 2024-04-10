@@ -2,7 +2,7 @@
     <div class="flex flex-column justify-content-center align-items-center w-full mt-4">
         <div class="flex text-2xl w-full">
             <div class="flex justify-content-center align-items-center w-full">
-                Account Summary
+                <p class="text-md underline">Account Summary for {{ currentLoggedInUser }}</p>
             </div>
         </div>
         <div  class="flex flex-column justify-content-center align-content-center w-full mb-5" v-if="!isLoadingTransactionHistoryBetnUsers">
@@ -41,11 +41,15 @@ const store = useStore();
 
 let isTransactionSaveInProgress = ref(false);
 
-let currentSelectedUser = ref('Dipesh');
+let currentSelectedUser = ref('');
 
 let showUserExpenseDialog = ref(false);
 
 let isLoadingTransactionHistoryBetnUsers =  ref(true);
+
+let currentLoggedInUser = computed(() => {
+    return store.getters['User/username']
+});
 
 let  expenseHistoryBetweenTwoUsers = computed(() => {
     return store.getters['Transaction/getCurrentTransactionBetweenSelectedUsers']
