@@ -63,10 +63,11 @@ let handleAmtChange=(e) =>{
 
 const  emit  = defineEmits(['hideDialog']);
 
-let handleSave = (selectedUserEmails, amount, description) => {
-    emit('saveTransaction', { selectedUserEmails, amount, description });
+let handleSave = (selectedUserEmails, amt, desc) => {
     description.value='';
     amount.value=0;
+    debugger;
+    emit('saveTransaction', { selectedUserEmails, amt, desc });
 }
 
 onMounted(() => {

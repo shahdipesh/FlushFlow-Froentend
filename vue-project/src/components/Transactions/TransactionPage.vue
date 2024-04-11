@@ -103,9 +103,9 @@ let users = computed(() => {
 let showDialog = ref(false);
 let showExpenseHistoryDialog = ref(false);
 
-let handleTransactionSave = ({ selectedUserEmails, amount, description }) => {
+let handleTransactionSave = ({ selectedUserEmails, amt, desc }) => {
         isTransactionSaveInProgress.value = true;
-        store.dispatch('Transaction/addCustomTransaction', { emails: selectedUserEmails, ownerEmail: localStorage.email, ownerUsername: localStorage.username , amount, description }).then((res) => {
+        store.dispatch('Transaction/addCustomTransaction', { emails: selectedUserEmails, ownerEmail: localStorage.email, ownerUsername: localStorage.username , amount:amt, description:desc }).then((res) => {
             isTransactionSaveInProgress.value = false;
             showDialog.value = false;
         }).catch(() => {

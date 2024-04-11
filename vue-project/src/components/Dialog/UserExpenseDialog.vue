@@ -10,7 +10,7 @@
                     <template #content>
                         <div class="flex">
                         <div class="text-xs" v-if="transaction.owns!=currentUserEmail">
-                            {{ transaction.owns }} paid ${{ transaction.amount }} for {{ transaction.reason }} on {{ formatDate(transaction.date) }}
+                            {{ selectedUserUsername }} paid ${{ transaction.amount }} for {{ transaction.reason }} on {{ formatDate(transaction.date) }}
                         </div>
                         <div class="text-xs" v-else>
                             You paid ${{ transaction.amount }} for {{ transaction.reason }} on {{ formatDate(transaction.date) }}
