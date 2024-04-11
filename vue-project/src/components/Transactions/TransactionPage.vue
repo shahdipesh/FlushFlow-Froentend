@@ -21,7 +21,14 @@
     <AddExpenseDialog :isTransactionSaveInProgress="isTransactionSaveInProgress" :visible="showDialog"
         @hideDialog="showDialog = false" @saveTransaction="handleTransactionSave" />
     <expense-history-dialog :visible="showExpenseHistoryDialog" @hideDialog="showExpenseHistoryDialog = false" />
-    <user-expense-dialog @remindAboutIncorrectTransaction="reportIncorrectTransaction" @customUserTransactionDeleted="handleCustomTransactionDelete" :expenseHistoryBetweenTwoUsers= "expenseHistoryBetweenTwoUsers" :selectedUserEmail="currentSelectedUser" :visible="showUserExpenseDialog" @hideDialog="showUserExpenseDialog = false" />
+    <user-expense-dialog
+        @remindAboutIncorrectTransaction="reportIncorrectTransaction"
+        @customUserTransactionDeleted="handleCustomTransactionDelete"
+        :expenseHistoryBetweenTwoUsers= "expenseHistoryBetweenTwoUsers"
+        :selectedUserEmail="currentSelectedUserEmail"
+        :selectedUserUsername="currentSelectedUserUsername"
+        :visible="showUserExpenseDialog"
+        @hideDialog="showUserExpenseDialog = false" />
 
 </template>
 
@@ -41,7 +48,8 @@ const store = useStore();
 
 let isTransactionSaveInProgress = ref(false);
 
-let currentSelectedUser = ref('');
+let currentSelectedUserEmail = ref('');
+let currentSelectedUserUsername = ref('');
 
 let showUserExpenseDialog = ref(false);
 
@@ -59,11 +67,11 @@ let totalExpense = computed(() => {
     return store.getters['Transaction/getTotalExpense']
 });
 
-let handleCustomTransactionDelete = () => {
-    store.dispatch('Transaction/getTransactionsBetweenTwoUsers', {borrowerEmail:email}).then((res) => {
-        showUserExpenseDialog.value = true;
-         expenseHistoryBetweenTwoUsers.value = res.data;
-    });
+let handleCustomTransactionDelete = ({id, borrowerEmail}) => {
+    // store.dispatch('Transaction/getTransactionsBetweenTwoUsers', {borrowerEmail}).then((res) => {
+    //     showUserExpenseDialog.value = true;
+    //      expenseHistoryBetweenTwoUsers.value = res.data;
+    // });
 }
 
 const handleShowExpenseHistoryDialog = () => {
@@ -71,8 +79,9 @@ const handleShowExpenseHistoryDialog = () => {
     showExpenseHistoryDialog.value = true;
 }
 
-let handleBorrowerClicked = (email) => {
-    currentSelectedUser.value = email;
+let handleBorrowerClicked = (email, name) => {
+    currentSelectedUserEmail.value = email;
+    currentSelectedUserUsername.value = name;
     store.dispatch('Transaction/getTransactionsBetweenTwoUsers', {borrowerEmail:email}).then((res) => {
         showUserExpenseDialog.value = true;
          expenseHistoryBetweenTwoUsers.value = res.data;

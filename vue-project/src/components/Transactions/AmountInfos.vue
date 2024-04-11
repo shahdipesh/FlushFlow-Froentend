@@ -29,8 +29,8 @@ let AmountInfos = computed(() => {
   return store.getters['Transaction/getAmountOwedByAll']
 });
 
-let handleBorrowerClicked = (email) => {
-    emit('borrowerClicked', email);
+let handleBorrowerClicked = (email, name) => {
+    emit('borrowerClicked', email, name);
 }
 
 

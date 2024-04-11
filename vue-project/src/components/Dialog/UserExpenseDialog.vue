@@ -3,7 +3,7 @@
         <ProgressSpinner v-if="isDeleteTransactionInProgress"/>
         <Dialog v-else class="dialog" :closable="false" v-model:visible="props.visible" header="Expense between you and ">
             <template #header>
-                Expense between You and {{ selectedUserEmail }}
+                Expense between You and {{ selectedUserUsername }}
                 </template>
             <template v-for="transaction in props.expenseHistoryBetweenTwoUsers">
                 <card>
@@ -41,6 +41,7 @@ const store = useStore();
 const props = defineProps({
     visible: Boolean,
     selectedUserEmail: String,
+    selectedUserUsername: String,
     expenseHistoryBetweenTwoUsers: Array
 })
 
@@ -75,7 +76,7 @@ const deleteTransaction = (id) => {
         }).catch((err) => {
             isDeleteTransactionInProgress.value = false;
         });
-        emit('customUserTransactionDeleted');
+        // emit('customUserTransactionDeleted', {id, borrowerEmail: props.selectedUserEmail});
         isDeleteTransactionInProgress.value = false;
     });
 };
