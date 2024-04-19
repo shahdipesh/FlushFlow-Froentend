@@ -10,7 +10,7 @@ import store from '../store/index';
 const routes = [
   {
     path: '/',
-    redirect: '/transaction'
+    redirect: '/index'
   },
   {
     path: '/login',
