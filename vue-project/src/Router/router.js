@@ -4,6 +4,7 @@ import RegistrationPage from '../components/Register/RegistrationPage.vue';
 import TransactionPage from '../components/Transactions/TransactionPage.vue';
 import LandingPage from '../components/Landing/LandingPage.vue';
 import AccountSettingsPage from '../components/Accounts/AccountSettingsPage.vue';
+import GroupsPage from '../components/Groups/GroupsPage.vue';
 
 import store from '../store/index';
 
@@ -51,6 +52,12 @@ const routes = [
     path: '/transaction',
     name: 'Transaction',
     component: TransactionPage,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/groups',
+    name: 'Groups',
+    component: GroupsPage,
     meta: { requiresAuth: true }
   }
 ];
