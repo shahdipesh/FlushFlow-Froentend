@@ -26,7 +26,7 @@ let isBeingSettled = ref(false);
 let isBeingNotified = ref(false);
 
 let AmountInfos = computed(() => {
-  return store.getters['Transaction/getAmountOwedByAll']
+  return store.getters['Transaction/getAmountOwedByAllInGroup']
 });
 
 let handleBorrowerClicked = (email, name) => {

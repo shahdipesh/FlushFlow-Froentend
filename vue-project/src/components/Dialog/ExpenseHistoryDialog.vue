@@ -52,6 +52,7 @@ const formatDate = (dateString) => {
 const deleteTransaction = (id) => {
     store.dispatch('Transaction/deleteTransactionGroup', id).then(() => {
         store.dispatch('Transaction/getAllTransactionsForThisMonth');
+        router.go(0);
     });
 }
 

@@ -13,10 +13,10 @@
                 Paid By you and split between:
             </div>
             <div class="flex text-xs align-items-center mb-4 gap-2">
-                <template v-for="user in users">
+                <template v-for="user in usersInGroup">
                     <div class="flex gap-2" v-if="currentUserEmail != user.email">
                         <Checkbox v-model="selectedUserEmails" :value="user.email" class="flex flex-1" />
-                        {{ user.username }}
+                        {{ user.email }}
                     </div>
                 </template>
             </div>
@@ -32,8 +32,10 @@
 <script setup>
 import { defineProps, defineEmits, computed, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
+import { useRoute } from 'vue-router';
 
 const store = useStore();
+const route = useRoute();
 
 const props = defineProps({
     visible: Boolean,
@@ -47,10 +49,10 @@ let selectedUserEmails = ref([]);
 
 let shouldDisableSave = computed(()=>{
     return description.value==='' || amount.value=='' || amount.value<=0;
-})
+});
 
-let users = computed(() => {
-    return store.getters['Transaction/getAllUsers']
+let usersInGroup = computed(() => {
+    return store.getters['Group/getAllUsers']
 });
 
 let currentUserEmail = computed(() => {
@@ -64,15 +66,16 @@ let handleAmtChange=(e) =>{
 const  emit  = defineEmits(['hideDialog']);
 
 let handleSave = (selectedUserEmails, amt, desc) => {
+    let groupId = route.query.groupId;
     description.value='';
     amount.value=0;
-    debugger;
-    emit('saveTransaction', { selectedUserEmails, amt, desc });
+    emit('saveTransaction', { selectedUserEmails, amt, desc, groupId });
 }
 
 onMounted(() => {
-    store.dispatch('Transaction/getAllUsers');
-})
+    let groupId = route.query.groupId;
+    store.dispatch('Group/getAllUsers', groupId);
+});
 
 </script>
 

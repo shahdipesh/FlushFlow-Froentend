@@ -18,8 +18,10 @@
 <script setup>
 import { defineProps,ref,  computed, defineEmits } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 const store = useStore();
+const router = useRouter();
 
 const props = defineProps({
     email: String,
@@ -46,6 +48,7 @@ const amountClass = computed(() => ({
 let settleBalance = (email) => {
     isBeingSettled.value = true;
     store.dispatch('Transaction/settleUp', {borrowerEmail: email}).then(() => {
+        router.go(0);
         isBeingSettled.value = false;
     }).catch(() => {
         isBeingSettled.value = false;

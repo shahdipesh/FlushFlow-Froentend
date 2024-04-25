@@ -11,7 +11,8 @@ export default {
     namespaced: true,
     state() {
         return {
-            amountOwed: null
+            amountOwed: null,
+            amountOwedInGroup: null,
         };
     },
     mutations: {
@@ -19,6 +20,9 @@ export default {
         // For example:
         SET_AMOUNT_OWED(state, amountOwed) {
             state.amountOwed = amountOwed;
+        },
+        SET_AMOUNT_OWED_IN_GROUP(state, amountOwed) {
+            state.amountOwedInGroup = amountOwed;
         },
         SET_TOTAL_EXPENSE(state, totalExpense) {
             state.totalExpense = totalExpense;
@@ -68,7 +72,6 @@ export default {
             state.currentTransactionBetweenSelectedUsers = transactions;
         },
         UPDATE_AMOUNT_OWED_AFTER_DELETE(state, { borrowerEmail, amount }) {
-            debugger;
             state.amountOwed.forEach((user) => {
                 if (user.email === borrowerEmail) {
                     user.amount -= amount;
@@ -91,7 +94,15 @@ export default {
                     console.error(error);
                 });
         },
-
+        async getAmountsOwedToCurrentUserInGroup({ commit }, groupId) {
+            return axios.get(`${BASE_URL}/api/transaction/getAmountOwedToCurrentUserInGroup?currentUserEmail=${localStorage.getItem('email')}&groupId=${groupId}`)
+                .then((response) => {
+                    commit('SET_AMOUNT_OWED_IN_GROUP', response.data);
+                    return response;
+                }).catch((error) => {
+                    console.error(error);
+                });
+        },
         async getTotalExpense({ commit }) {
             return axios.get(`${BASE_URL}/api/transaction/getTotalExpenses`)
                 .then((response) => {
@@ -102,8 +113,8 @@ export default {
                 });
         },
 
-        async addTransaction({ commit }, { email, username, amount, description }) {
-            return axios.post(`${BASE_URL}/api/transaction/addTransaction`, { email, username, amount, reason: description })
+        async addTransaction({ commit }, { email, username, amount, description, groupId }) {
+            return axios.post(`${BASE_URL}/api/transaction/addTransaction`, { email, username, amount, reason: description, groupId })
                 .then((response) => {
                     commit('ADD_TOTAL_EXPENSE', amount); // Removed extra closing parenthesis
                     commit('ADD_AMOUNT_OWED_BY_ALL', response.data);
@@ -146,8 +157,8 @@ export default {
         },
 
 
-        async addCustomTransaction({ commit }, { emails, ownerEmail, ownerUsername, amount, description }) {
-            return axios.post(`${BASE_URL}/api/transaction/addCustomTransaction`, { emails, ownerEmail,ownerUsername, amount, description })
+        async addCustomTransaction({ commit }, { emails, ownerEmail, ownerUsername, amount, description, groupId }) {
+            return axios.post(`${BASE_URL}/api/transaction/addCustomTransaction`, { emails, ownerEmail,ownerUsername, amount, description, groupId })
                 .then((response) => {
                     let perUserAmount = amount / (emails.length+1);
                     commit('UPDATE_AMOUNT_OWED_BY_USERS', { emails, amount:perUserAmount });
@@ -172,7 +183,6 @@ export default {
         async deleteTransactionCustom({ commit },{id, borrowerEmail}) {
             return axios.delete(`${BASE_URL}/api/transaction/deleteTransactionCustom?id=${id}`)
                 .then((response) => {
-                    debugger;
                     commit('UPDATE_AMOUNT_OWED_AFTER_DELETE', { borrowerEmail, amount:response.data.amount });
                     commit('getTransactionsBetweenTwoUsers', { borrowerEmail });
                     return response;
@@ -185,7 +195,6 @@ export default {
         async deleteTransactionGroup({ commit,dispatch },  id ) {
             return axios.delete(`${BASE_URL}/api/transaction/deleteTransactionGroup?id=${id}`)
                 .then((response) => {
-                    debugger;
                     window.location.reload();
                     return response;
                 }).catch((error) => {
@@ -218,8 +227,10 @@ export default {
     },
     getters: {
         getAmountOwedByAll(state) {
-
             return state.amountOwed;
+        },
+        getAmountOwedByAllInGroup(state) {
+            return state.amountOwedInGroup;
         },
         getTotalExpense(state) {
             return state.totalExpense;

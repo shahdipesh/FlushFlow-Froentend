@@ -47,7 +47,7 @@ const items = computed(() => {
             {
                 label: 'Splitwise',
                 icon: 'pi pi-money-bill',
-                command: () => router.push('/transaction')
+                command: () => router.push('/groups')
             }
         ];
     }
